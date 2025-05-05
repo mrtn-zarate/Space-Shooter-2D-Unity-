@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Audio;
 
 public class Enemy_movement : MonoBehaviour
 {
@@ -8,19 +9,23 @@ public class Enemy_movement : MonoBehaviour
     [SerializeField] private float shoot_delay;
     [SerializeField] private GameObject bullet_prefab;
     [SerializeField] private GameObject spawnpoint;
+    public AudioSource audiosource;
+    private bool alive=true;
 
     void Start()
     {
         StartCoroutine(spawn_bullets());
+        
     }
 
     void Update()
     {
         transform.Translate(new Vector3(-1, 0, 0) * velocidad * Time.deltaTime);
+        
     }
     IEnumerator spawn_bullets()
     {
-        while (true)
+        while (alive)
         {
             Instantiate(bullet_prefab, spawnpoint.transform.position, Quaternion.identity);
             yield return new WaitForSeconds(shoot_delay);
@@ -29,9 +34,22 @@ public class Enemy_movement : MonoBehaviour
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.CompareTag("Player") || collision.gameObject.CompareTag("Barrier"))
+        if (collision.gameObject.CompareTag("Barrier"))
         {
-            Destroy(this.gameObject);
+            Invoke("destroyenemy", 1f);
         }
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            alive = false;
+            UI_Canvas.kills += 1;
+            audiosource.Play();
+            GetComponentInChildren<Collider2D>().enabled = false;
+            GetComponentInChildren<SpriteRenderer>().enabled = false;
+            Invoke("destroyenemy", 1f);
+        }
+    }
+    void destroyenemy()
+    {
+        Destroy(this.gameObject);
     }
 }

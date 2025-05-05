@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Audio;
 
 public class Player_movement : MonoBehaviour
 {
@@ -8,6 +9,7 @@ public class Player_movement : MonoBehaviour
     [SerializeField] private float shoot_delay;
     [SerializeField] private GameObject bullet_prefab;
     [SerializeField] private GameObject spawnpoint;
+    public AudioSource audiosource;
     private float temporizador = 0.5f;
     private float vidas = 3;
     // Start is called before the first frame update
@@ -38,19 +40,21 @@ public class Player_movement : MonoBehaviour
         
     void Disparar()
     {
+        
         temporizador += 1 * Time.deltaTime;
 
         if(Input.GetKey(KeyCode.Space) && temporizador > shoot_delay)
         {
             Instantiate(bullet_prefab, spawnpoint.transform.position, Quaternion.identity);
             temporizador = 0;
+            audiosource.Play();
         }
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if(collision.gameObject.CompareTag("Enemy"))
         {
-            vidas -= 1;
+            UI_Canvas.lives -= 1;
             Destroy(collision.gameObject);
         }
     }

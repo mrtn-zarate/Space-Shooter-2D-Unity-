@@ -19,7 +19,7 @@ public class Enemy_bullet : MonoBehaviour
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.CompareTag("Player") || collision.gameObject.CompareTag("Barrier"))
+        if (collision.gameObject.CompareTag("Barrier"))
         {
             Destroy(this.gameObject);
         }
