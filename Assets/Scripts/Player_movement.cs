@@ -9,9 +9,9 @@ public class Player_movement : MonoBehaviour
     [SerializeField] private float shoot_delay;
     [SerializeField] private GameObject bullet_prefab;
     [SerializeField] private GameObject spawnpoint;
-    public AudioSource audiosource;
+    public AudioSource audiosource_bullet;
+    public AudioSource audiosource_dead;
     private float temporizador = 0.5f;
-    private float vidas = 3;
     // Start is called before the first frame update
     void Start()
     {
@@ -47,7 +47,7 @@ public class Player_movement : MonoBehaviour
         {
             Instantiate(bullet_prefab, spawnpoint.transform.position, Quaternion.identity);
             temporizador = 0;
-            audiosource.Play();
+            audiosource_bullet.Play();
         }
     }
     private void OnTriggerEnter2D(Collider2D collision)
@@ -55,6 +55,7 @@ public class Player_movement : MonoBehaviour
         if(collision.gameObject.CompareTag("Enemy"))
         {
             UI_Canvas.lives -= 1;
+            audiosource_dead.Play();
             Destroy(collision.gameObject);
         }
     }
