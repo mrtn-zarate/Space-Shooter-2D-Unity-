@@ -43,6 +43,7 @@ public class Enemy_movement : MonoBehaviour
             alive = false;
             UI_Canvas.kills += 1;
             EnemySpawner1.kills += 1;
+            EnemySpawner2.kills += 1;
             audiosource.Play();
             GetComponentInChildren<Collider2D>().enabled = false;
             GetComponentInChildren<SpriteRenderer>().enabled = false;
