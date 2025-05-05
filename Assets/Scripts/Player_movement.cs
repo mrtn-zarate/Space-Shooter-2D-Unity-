@@ -11,11 +11,13 @@ public class Player_movement : MonoBehaviour
     [SerializeField] private GameObject spawnpoint;
     public AudioSource audiosource_bullet;
     public AudioSource audiosource_dead;
+    public AudioSource audiosource_gameover;
+    private int hits;
     private float temporizador = 0.5f;
     // Start is called before the first frame update
     void Start()
     {
-        
+        hits = 0;
     }
 
     // Update is called once per frame
@@ -24,6 +26,7 @@ public class Player_movement : MonoBehaviour
         Movimiento();
         Disparar();
         LimitesMovimiento();
+        
     }
     void Movimiento()
     {
@@ -55,8 +58,13 @@ public class Player_movement : MonoBehaviour
         if(collision.gameObject.CompareTag("Enemy"))
         {
             UI_Canvas.lives -= 1;
+            hits += 1;
             audiosource_dead.Play();
             Destroy(collision.gameObject);
+        }
+        if (hits >= 3)
+        {
+            audiosource_gameover.Play();
         }
     }
 }
